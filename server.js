@@ -37,8 +37,8 @@ const User = mongoose.model("User", userSchema);
 const connection = mysql.createConnection({
   host: "35.200.187.212", // or container name if same network
   user: "root",
-  password: "password",
-  database: "mydb",
+  password: "admin@123",
+  database: "ashdb",
   port: 3306,
 });
 
