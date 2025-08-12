@@ -10,6 +10,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+const mysql = require("mysql2");
 
 dotenv.config();
 const app = express();
@@ -31,6 +32,28 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
+
+// Create connection
+const connection = mysql.createConnection({
+  host: "35.200.187.212", // or container name if same network
+  user: "root",
+  password: "password",
+  database: "mydb",
+  port: 3306,
+});
+
+// API endpoint
+app.post("/my-data", (req, res) => {
+  const { fromTS, toTS } = req.body;
+  const sql = `SELECT sum(aggregatedNoRecs)FROM api_statistics WHERE api = 'asauth' AND ts BETWEEN FROM_UNIXTIME(${fromTS}) AND FROM_UNIXTIME(${toTS})`;
+  connection.query(sql, ["active"], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Database error");
+    }
+    res.json(results);
+  });
+});
 
 // Signup Route
 app.post("/signup", async (req, res) => {
