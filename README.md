@@ -1,2 +1,2 @@
 # dashboardBackend
-This Repo contains backend code of new dashboard
+This repo contains backend code of new Bajaj dashboard
